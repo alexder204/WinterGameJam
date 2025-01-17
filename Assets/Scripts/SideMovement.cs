@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SideMovement : MonoBehaviour
@@ -21,14 +19,17 @@ public class SideMovement : MonoBehaviour
     private bool isJumping = false;
     private int jumpCount;
 
-    [Tooltip("Direction Control")]
     private Rigidbody2D rb;
-    private bool facingRight = true;
+
+    public bool facingRight = true; // Control for player's facing direction
     private float moveDirection;
+
+    private PlayerAttack playerAttack;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerAttack = GetComponent<PlayerAttack>();
     }
 
     void Start()
@@ -36,52 +37,44 @@ public class SideMovement : MonoBehaviour
         jumpCount = maxJumpCount;
     }
 
-
     void Update()
     {
-        // Inputs
+        // Handle movement inputs and jumping
         ProcessInputs();
 
-        // Animations
+        // Handle animations and player flip
         Animate();
     }
 
     private void FixedUpdate()
     {
-        // Check if player is grounded
+        // Check if player is grounded and apply movement
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
 
-        // Reset jump count when grounded and if the player was jumping
         if (isGrounded && rb.linearVelocity.y <= 0f)
         {
             jumpCount = maxJumpCount;
         }
 
-        // Movement
         Move();
     }
 
     private void Move()
     {
-        // Update horizontal movement
         rb.linearVelocity = new Vector2(moveDirection * moveSpeed, rb.linearVelocity.y);
 
-        // Only apply jump force when jumping is allowed and jumpCount is valid
         if (isJumping && jumpCount > 0)
         {
-            // Reset vertical velocity to prevent cumulative jumps
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f); // Reset vertical velocity
 
-            // Apply the jump force
             rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
             jumpCount--;
-            isJumping = false;  
+            isJumping = false;
         }
     }
 
     private void Animate()
     {
-        // Flip the character
         if (moveDirection > 0 && !facingRight)
         {
             FlipCharacter();
@@ -94,11 +87,9 @@ public class SideMovement : MonoBehaviour
 
     private void ProcessInputs()
     {
-        // Horizontal movement input
         moveDirection = Input.GetAxis("Horizontal");
 
-        // Jump input processing 
-        if (Input.GetButtonDown("Jump") && jumpCount > 0) 
+        if (Input.GetButtonDown("Jump") && jumpCount > 0)
         {
             isJumping = true;
         }
@@ -107,6 +98,6 @@ public class SideMovement : MonoBehaviour
     private void FlipCharacter()
     {
         facingRight = !facingRight;
-        transform.Rotate(0f, 180f, 0f);
+        transform.Rotate(0f, 180f, 0f);  // Flip sprite horizontally
     }
 }

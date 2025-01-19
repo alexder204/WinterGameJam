@@ -33,11 +33,24 @@ public class PlayerHealth : MonoBehaviour
 
     // This method handles player death
     void Die()
+{
+    Debug.Log("Player is dead!");
+
+    // Disable the slider interaction
+    if (healthSlider != null)
     {
-        Debug.Log("Player is dead!");
-        // Add death logic here (e.g. Game Over, reload scene, etc.):
-        Application.Quit();  // For now, just close the game
+        healthSlider.interactable = false;
     }
+
+    // If the game is running in the editor, stop play mode
+    #if UNITY_EDITOR
+    UnityEditor.EditorApplication.isPlaying = false;
+    #else
+    // For a built application, quit the game
+    Application.Quit();
+    #endif
+}
+
 
     // This method restores health after a delay when all enemies are defeated
     public void RestoreHealth(float amount)

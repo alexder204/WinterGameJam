@@ -1849,7 +1849,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 4.4791603, y: 10.523483}
+  m_Offset: {x: 4.4791603, y: 38.482616}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1859,7 +1859,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 9.958321, y: 50.89277}
+  m_Size: {x: 9.958321, y: 106.81103}
   m_EdgeRadius: 0
 --- !u!1 &204831357
 GameObject:
@@ -8563,7 +8563,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 4.4791603, y: 10.523483}
+  m_Offset: {x: 4.4791603, y: 38.345562}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -8573,7 +8573,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 9.958321, y: 50.89277}
+  m_Size: {x: 9.958321, y: 106.536934}
   m_EdgeRadius: 0
 --- !u!1 &1374572970
 GameObject:
@@ -11352,7 +11352,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 272107073}
   m_FillRect: {fileID: 1847738388}
   m_HandleRect: {fileID: 272107072}
@@ -11495,9 +11495,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6778e69268d32d48aae2a5f033fc035, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 178961385253173239, guid: 7e1dd116baf1cf042b06cf98805624b4, type: 3}
-  enemy1Prefab: {fileID: 5142305311160807533, guid: 0a12fd8169164a2499e36a1f067a8bb6, type: 3}
-  enemiesToSpawn: 2
+  enemyPrefab: {fileID: 7744261694822678433, guid: 7e1dd116baf1cf042b06cf98805624b4, type: 3}
+  enemy1Prefab: {fileID: 6522165238734655597, guid: 0a12fd8169164a2499e36a1f067a8bb6, type: 3}
+  enemiesToSpawn: 4
   spawnPoints:
   - {fileID: 1645816271}
   - {fileID: 52547391}

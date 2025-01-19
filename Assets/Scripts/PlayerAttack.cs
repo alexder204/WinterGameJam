@@ -110,7 +110,6 @@ public class PlayerAttack : MonoBehaviour
             if (enemy != null)
             {
                 enemy.TakeDamage(currentAttackPower);
-                Debug.Log("Enemy hit with damage: " + currentAttackPower);
             }
         }
     }

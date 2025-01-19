@@ -1,4 +1,5 @@
 using UnityEngine;
+
 public class SideMovement : MonoBehaviour
 {
     [Header("Movement values")]
@@ -114,15 +115,43 @@ public class SideMovement : MonoBehaviour
         {
             FlipCharacter();
         }
+
+        // Play jumpup or jumpdown animations based on vertical velocity
+        if (rb.linearVelocity.y > 0f)  // Player is going up
+        {
+            animator.SetBool("isJumpingUp", true);
+            animator.SetBool("isJumpingDown", false);
+        }
+        else if (rb.linearVelocity.y < 0f)  // Player is going down
+        {
+            animator.SetBool("isJumpingUp", false);
+            animator.SetBool("isJumpingDown", true);
+        }
+        else if (isGrounded)  // Player is on the ground
+        {
+            animator.SetBool("isJumpingUp", false);
+            animator.SetBool("isJumpingDown", false);
+        }
     }
 
     private void ProcessInputs()
     {
         moveDirection = Input.GetAxis("Horizontal");
 
+        // Check for jump input
         if (Input.GetButtonDown("Jump") && jumpCount > 0)
         {
             isJumping = true;
+
+            // Trigger the "jump pressed" animation and log for debugging
+            Debug.Log("Jump button pressed!");
+            animator.SetBool("isJumpPressed", true);
+        }
+
+        // Stop the "jump pressed" animation once the player leaves the ground
+        if (isJumping && jumpCount > 0)
+        {
+            animator.SetBool("isJumpPressed", false);
         }
     }
 

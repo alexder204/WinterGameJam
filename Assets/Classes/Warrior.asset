@@ -17,6 +17,6 @@ MonoBehaviour:
   attackDistance: 5
   attackSpeed: 1.4
   attackCooldownTime: 0.7
-  movementSpeed: 10
+  movementSpeed: 15
   maxJumpCount: 2
-  jumpForce: 15
+  jumpForce: 45

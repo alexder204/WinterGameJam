@@ -11,12 +11,13 @@ public class SideMovement : MonoBehaviour
     public float checkRadius;
     public Transform ceilingCheck;
     public Transform groundCheck;
-    public LayerMask groundObjects;
+    public LayerMask groundLayer;  // Ground layer mask
+    public LayerMask platformLayer;  // Platform layer mask
     private bool isGrounded = false;
 
     [Header("Jump Settings")]
     [SerializeField] public int maxJumpCount;
-    private bool isJumping = false;
+    public bool isJumping = false;
     private int jumpCount;
 
     private Rigidbody2D rb;
@@ -35,11 +36,19 @@ public class SideMovement : MonoBehaviour
     [Header("Player Class Data")]
     public PlayerClassData playerClassData;
 
+    private Collider2D playerCollider;
+    private bool isFallingThrough = false;
+    // Expose collider disable time so that it can be changed in Unity Inspector or via manager script
+    [Header("Platform Fall Settings")]
+    public float colliderDisableTime = 0.2f; // Time for the collider to stay off (public for easy access)
+    private float colliderDisableTimer = 0f;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         playerAttack = GetComponent<PlayerAttack>();
         animator = GetComponent<Animator>();
+        playerCollider = GetComponent<Collider2D>();
 
         // Initialize movement speed, maxJumpCount, and jumpForce based on class
         if (playerClassData != null)
@@ -68,29 +77,47 @@ public class SideMovement : MonoBehaviour
 
         // Handle animations and player flip
         Animate();
+
+        // Manage collider disable time
+        if (isFallingThrough && colliderDisableTimer > 0)
+        {
+            colliderDisableTimer -= Time.deltaTime;
+        }
+        else if (colliderDisableTimer <= 0)
+        {
+            // Re-enable the collider after the delay
+            if (!playerCollider.enabled)
+            {
+                playerCollider.enabled = true;
+            }
+        }
     }
 
     private void FixedUpdate()
     {
-        // Check if player is grounded and apply movement
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
+        // Check if player is grounded (including platform check)
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer | platformLayer);
 
         if (isGrounded && rb.linearVelocity.y <= 0f)
         {
             jumpCount = maxJumpCount;  // Reset jump count when grounded
         }
 
+        // Call the method to check if the player can pass through the platform
+        CheckPlatformPassThrough();
+
         Move();
     }
 
     private void Move()
     {
-        rb.linearVelocity = new Vector2(moveDirection * currentMoveSpeed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(moveDirection * currentMoveSpeed, rb.linearVelocity.y);  // Set only horizontal velocity
 
         if (isJumping && jumpCount > 0)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
-            rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+            // Apply a vertical force for the jump, using jumpForce
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);  // Cancel any vertical velocity before jumping
+            rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);  // Apply the jump force
             jumpCount--;
             isJumping = false;
         }
@@ -98,6 +125,7 @@ public class SideMovement : MonoBehaviour
 
     private void Animate()
     {
+        // Check the horizontal movement and update the animation
         if (moveDirection != 0)
         {
             animator.SetBool("isRunning", true);
@@ -107,6 +135,7 @@ public class SideMovement : MonoBehaviour
             animator.SetBool("isRunning", false);
         }
 
+        // Handle flip of the character based on movement direction
         if (moveDirection > 0 && !facingRight)
         {
             FlipCharacter();
@@ -142,16 +171,18 @@ public class SideMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && jumpCount > 0)
         {
             isJumping = true;
-
-            // Trigger the "jump pressed" animation and log for debugging
-            Debug.Log("Jump button pressed!");
-            animator.SetBool("isJumpPressed", true);
         }
 
-        // Stop the "jump pressed" animation once the player leaves the ground
-        if (isJumping && jumpCount > 0)
+        // Check for "S" input to allow falling through platform, only if grounded
+        if (Input.GetKey(KeyCode.S) && IsOnPlatform() && isGrounded && IsInIdleOrRunningState())
         {
-            animator.SetBool("isJumpPressed", false);
+            // Disable collider temporarily to fall through platform
+            if (!isFallingThrough && playerCollider.enabled)
+            {
+                playerCollider.enabled = false;
+                isFallingThrough = true;
+                colliderDisableTimer = colliderDisableTime;
+            }
         }
     }
 
@@ -159,5 +190,43 @@ public class SideMovement : MonoBehaviour
     {
         facingRight = !facingRight;
         transform.Rotate(0f, 180f, 0f);
+    }
+
+    // Check if the player can pass through platforms when jumping or holding "S"
+    private void CheckPlatformPassThrough()
+    {
+        // Re-enable the collider after some time if "S" was held
+        if (isFallingThrough && colliderDisableTimer <= 0)
+        {
+            isFallingThrough = false;
+        }
+
+        // If the player is jumping upwards (not grounded), ignore platform collisions to allow jumping through
+        if (rb.linearVelocity.y > 0f)
+        {
+            playerCollider.enabled = false;  // Disable collider while jumping up
+        }
+        else if (rb.linearVelocity.y <= 0f && !isFallingThrough)
+        {
+            // Re-enable collisions when falling or grounded
+            playerCollider.enabled = true;
+        }
+    }
+
+    // Checks if the player is currently standing on a platform
+    private bool IsOnPlatform()
+    {
+        // You can use a check like this to make sure the player is on a platform layer
+        Collider2D platformCollider = Physics2D.OverlapCircle(groundCheck.position, checkRadius, platformLayer);
+        return platformCollider != null;
+    }
+
+    // Check if the player is in either the "idle" or "running" state
+    private bool IsInIdleOrRunningState()
+    {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        // Check if the player is either in the "Idle" or "Running" state (adjust these state names based on your animation setup)
+        return stateInfo.IsName("Idle") || stateInfo.IsName("Running");
     }
 }

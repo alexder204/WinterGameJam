@@ -72,8 +72,6 @@ public class PlayerAttack : MonoBehaviour
         // Start the cooldown timer based on the player's class
         currentCooldownTime = currentAttackCooldownTime;
 
-        Debug.Log("Attacking with power: " + currentAttackPower);
-
         hit = default(RaycastHit2D);
 
         // Cast ray in the correct direction based on the player's facing direction

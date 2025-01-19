@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   className: Warrior
   attackPower: 50
-  speed: 4
-  attackDistance: 8
+  attackDistance: 5
+  attackSpeed: 1.4
+  attackCooldownTime: 0.7
+  movementSpeed: 10
+  maxJumpCount: 2
+  jumpForce: 15

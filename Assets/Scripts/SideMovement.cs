@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class SideMovement : MonoBehaviour
 {
     [Header("Movement values")]
@@ -21,15 +20,36 @@ public class SideMovement : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    public bool facingRight = true; // Control for player's facing direction
+    public bool facingRight = true;
     private float moveDirection;
 
     private PlayerAttack playerAttack;
+    private Animator animator;
+
+    private float currentMoveSpeed;
+    private bool canMove = true;
+    public float speedRecoveryTime = 2f;
+    private float speedRecoveryRate;
+
+    [Header("Player Class Data")]
+    public PlayerClassData playerClassData;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         playerAttack = GetComponent<PlayerAttack>();
+        animator = GetComponent<Animator>();
+
+        // Initialize movement speed, maxJumpCount, and jumpForce based on class
+        if (playerClassData != null)
+        {
+            moveSpeed = playerClassData.movementSpeed;
+            maxJumpCount = playerClassData.maxJumpCount;
+            jumpForce = playerClassData.jumpForce;
+        }
+
+        currentMoveSpeed = moveSpeed;
+        speedRecoveryRate = moveSpeed / speedRecoveryTime;
     }
 
     void Start()
@@ -39,8 +59,11 @@ public class SideMovement : MonoBehaviour
 
     void Update()
     {
-        // Handle movement inputs and jumping
-        ProcessInputs();
+        // Handle movement inputs and jumping if allowed
+        if (canMove)
+        {
+            ProcessInputs();
+        }
 
         // Handle animations and player flip
         Animate();
@@ -53,7 +76,7 @@ public class SideMovement : MonoBehaviour
 
         if (isGrounded && rb.linearVelocity.y <= 0f)
         {
-            jumpCount = maxJumpCount;
+            jumpCount = maxJumpCount;  // Reset jump count when grounded
         }
 
         Move();
@@ -61,12 +84,11 @@ public class SideMovement : MonoBehaviour
 
     private void Move()
     {
-        rb.linearVelocity = new Vector2(moveDirection * moveSpeed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(moveDirection * currentMoveSpeed, rb.linearVelocity.y);
 
         if (isJumping && jumpCount > 0)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f); // Reset vertical velocity
-
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
             rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
             jumpCount--;
             isJumping = false;
@@ -75,6 +97,15 @@ public class SideMovement : MonoBehaviour
 
     private void Animate()
     {
+        if (moveDirection != 0)
+        {
+            animator.SetBool("isRunning", true);
+        }
+        else
+        {
+            animator.SetBool("isRunning", false);
+        }
+
         if (moveDirection > 0 && !facingRight)
         {
             FlipCharacter();
@@ -98,6 +129,6 @@ public class SideMovement : MonoBehaviour
     private void FlipCharacter()
     {
         facingRight = !facingRight;
-        transform.Rotate(0f, 180f, 0f);  // Flip sprite horizontally
+        transform.Rotate(0f, 180f, 0f);
     }
 }

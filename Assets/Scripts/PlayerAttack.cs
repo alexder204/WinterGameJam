@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    public PlayerClassData playerClassData;
+    public PlayerClassData playerClassData;  // Reference to the PlayerClassData ScriptableObject
 
-    private float currentAttackPower;
-    private float currentAttackDistance;
+    public float currentAttackPower;
+    public float currentAttackDistance;
+    public float currentAttackCooldownTime;  // Variable to hold the cooldown time
+    public float currentAttackSpeed;  // Variable to store the attack speed
 
     public Transform raycastOrigin;  // Single raycast origin at the center of the player
 
@@ -15,21 +17,41 @@ public class PlayerAttack : MonoBehaviour
 
     public LayerMask enemyLayer;
 
+    private Animator animator;  // Reference to the Animator component
+
+    private bool isAttacking = false;  // Flag to track if the player is attacking
+    private float currentCooldownTime = 0f;  // Timer to track remaining cooldown
+
     void Start()
     {
+        // Set the attack properties from PlayerClassData
         currentAttackPower = playerClassData.attackPower;
         currentAttackDistance = playerClassData.attackDistance;
 
+        // Set attack speed from PlayerClassData
+        currentAttackSpeed = playerClassData.attackSpeed;
+
+        // Set attack cooldown based on attack speed
+        SetAttackCooldownFromSpeed();
+
         sideMovement = GetComponent<SideMovement>();
 
-        // You only need one raycast, it's always active
         raycastOrigin.gameObject.SetActive(true);
+
+        // Initialize the Animator component
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        // Check for attack input
-        if (Input.GetButtonDown("Fire1"))
+        // Decrease the cooldown timer over time
+        if (currentCooldownTime > 0)
+        {
+            currentCooldownTime -= Time.deltaTime;
+        }
+
+        // Check for attack input and if cooldown has finished, also ensure the player isn't already attacking
+        if (Input.GetButtonDown("Fire1") && currentCooldownTime <= 0 && !isAttacking)
         {
             Attack();
         }
@@ -38,6 +60,18 @@ public class PlayerAttack : MonoBehaviour
     // Attack method (Handles both Melee and Ranged attacks)
     public virtual void Attack()
     {
+        // Set the attacking flag to true to prevent multiple attacks
+        isAttacking = true;
+
+        // Immediately trigger the attack animation
+        if (animator != null)
+        {
+            animator.SetBool("isAttacking", true);  // Trigger the "Attack" animation with a bool parameter
+        }
+
+        // Start the cooldown timer based on the player's class
+        currentCooldownTime = currentAttackCooldownTime;
+
         Debug.Log("Attacking with power: " + currentAttackPower);
 
         hit = default(RaycastHit2D);
@@ -81,5 +115,20 @@ public class PlayerAttack : MonoBehaviour
                 Debug.Log("Enemy hit with damage: " + currentAttackPower);
             }
         }
+    }
+
+    // Reset attacking flag once the attack animation is finished
+    public void FinishAttackAnimation()
+    {
+        // End attack animation
+        isAttacking = false;
+        animator.SetBool("isAttacking", false);  // Set isAttacking to false to stop the attack animation
+    }
+
+    // Method to set the attack cooldown based on attack speed
+    protected void SetAttackCooldownFromSpeed()
+    {
+        // Calculate attack cooldown based on attack speed (lower attackSpeed means faster attack)
+        currentAttackCooldownTime = 1 / currentAttackSpeed;  // This assumes attackSpeed > 0
     }
 }

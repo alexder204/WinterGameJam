@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 59e8c3c0a4c6b4b4a91bc4eb34c35a66
+guid: 0c4d224b1ec0ff740a2c76096683d65b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2862047150982690937
-    second: Kingdomhillback_0
+      213: 205159425560493681
+    second: BackgroundMain_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,12 +46,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Kingdomhillback_0
+      name: BackgroundMain_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 280
-        height: 123
+        width: 120
+        height: 120
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 978fdb458b808b720800000000000000
-      internalID: 2862047150982690937
+      spriteID: 17e3bda196fd8d200800000000000000
+      internalID: 205159425560493681
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Kingdomhillback_0: 2862047150982690937
+      BackgroundMain_0: 205159425560493681
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

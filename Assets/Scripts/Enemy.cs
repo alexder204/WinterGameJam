@@ -31,8 +31,11 @@ public class Enemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player").transform;  // Find player by tag
-        scoreManager = FindObjectOfType<ScoreManager>();  // Get reference to the ScoreManager
+
+        // Replace the deprecated method with the new one
+        scoreManager = Object.FindFirstObjectByType<ScoreManager>();  // Get reference to the ScoreManager
     }
+
 
     private void Update()
     {

@@ -10,7 +10,6 @@ public class AudioManager : MonoBehaviour
     public AudioSource musicAudioSource;
     public AudioSource sfxAudioSource;
 
-    // Sliders for volume adjustment
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
 
@@ -22,7 +21,6 @@ public class AudioManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -32,19 +30,19 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        // Load saved audio settings on start
+        // Initialize the audio settings based on PlayerPrefs
         LoadAudioSettings();
 
-        // Set sliders to the saved volume values
+        // Set slider values
         if (musicVolumeSlider != null)
         {
-            musicVolumeSlider.value = PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, 1f);  // Default to 1 if not set
+            musicVolumeSlider.value = PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, 1f);
             musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
         }
 
         if (sfxVolumeSlider != null)
         {
-            sfxVolumeSlider.value = PlayerPrefs.GetFloat(SFX_VOLUME_KEY, 1f);  // Default to 1 if not set
+            sfxVolumeSlider.value = PlayerPrefs.GetFloat(SFX_VOLUME_KEY, 1f);
             sfxVolumeSlider.onValueChanged.AddListener(SetSFXVolume);
         }
     }
@@ -52,19 +50,19 @@ public class AudioManager : MonoBehaviour
     public void SetMusicVolume(float volume)
     {
         audioMixer.SetFloat("MusicVolume", Mathf.Log10(volume) * 20);
-        PlayerPrefs.SetFloat(MUSIC_VOLUME_KEY, volume);  // Save the volume setting
+        PlayerPrefs.SetFloat(MUSIC_VOLUME_KEY, volume);  // Save the music volume to PlayerPrefs
     }
 
     public void SetSFXVolume(float volume)
     {
         audioMixer.SetFloat("SFXAudio", Mathf.Log10(volume) * 20);
-        PlayerPrefs.SetFloat(SFX_VOLUME_KEY, volume);  // Save the volume setting
+        PlayerPrefs.SetFloat(SFX_VOLUME_KEY, volume);  // Save the SFX volume to PlayerPrefs
     }
 
     private void LoadAudioSettings()
     {
-        float musicVolume = PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, 1f);  // Default to 1 if not set
-        float sfxVolume = PlayerPrefs.GetFloat(SFX_VOLUME_KEY, 1f);      // Default to 1 if not set
+        float musicVolume = PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, 1f);
+        float sfxVolume = PlayerPrefs.GetFloat(SFX_VOLUME_KEY, 1f);
 
         SetMusicVolume(musicVolume);
         SetSFXVolume(sfxVolume);

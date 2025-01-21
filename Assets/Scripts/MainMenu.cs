@@ -1,21 +1,22 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;  // To handle scene loading
-using UnityEngine.UI;              // To interact with UI buttons
+using UnityEngine.SceneManagement;  
+using UnityEngine.UI;              
 
 public class MainMenu : MonoBehaviour
 {
-    // You can link these buttons and images via the Inspector
     public Button startButton;
     public Button quitButton;
-    public Button settingsButton;  // The new button for opening settings
-    public Button backButton;     // The new button for going back to the main menu
+    public Button settingsButton;
+    public Button settingsBackButton;     
+    public Button controlsButton;
+    public Button controlsBackButton;
 
-    public GameObject mainMenuImage;  // The main menu image (to disable)
-    public GameObject settingsImage;  // The settings image (to enable)
+    public GameObject mainMenuImage;  
+    public GameObject settingsMenu;   
+    public GameObject controlsMenu;   
 
     void Start()
     {
-        // Assign listeners to the buttons
         if (startButton != null)
         {
             startButton.onClick.AddListener(LoadNextScene);
@@ -31,21 +32,26 @@ public class MainMenu : MonoBehaviour
             settingsButton.onClick.AddListener(OpenSettings);
         }
 
-        if (backButton != null)
+        if (settingsBackButton != null)
         {
-            backButton.onClick.AddListener(CloseSettings);
+            settingsBackButton.onClick.AddListener(CloseSettings);
+        }
+        if (controlsButton != null)
+        {
+            controlsButton.onClick.AddListener(OpenControlsMenu);
+        }
+
+        if (controlsBackButton != null)
+        {
+            controlsBackButton.onClick.AddListener(BackToSettingsMenu);
         }
     }
 
-    // Load the next scene (assuming it's added to your build settings)
     void LoadNextScene()
     {
-        // Change the scene by its name or index.
-        // Ensure the next scene is added in your build settings
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    // Quit the game
     void QuitGame()
     {
         // If the game is running in the editor, stop play mode
@@ -57,31 +63,55 @@ public class MainMenu : MonoBehaviour
 #endif
     }
 
-    // Open the settings (disable main menu image and enable settings image)
     void OpenSettings()
     {
         if (mainMenuImage != null)
         {
-            mainMenuImage.SetActive(false);  // Disable the main menu image
+            mainMenuImage.SetActive(false);
         }
 
-        if (settingsImage != null)
+        if (settingsMenu != null)
         {
-            settingsImage.SetActive(true);  // Enable the settings image
+            settingsMenu.SetActive(true);
         }
     }
 
-    // Close the settings (enable the main menu image and disable settings image)
     void CloseSettings()
     {
-        if (settingsImage != null)
+        if (settingsMenu != null)
         {
-            settingsImage.SetActive(false);  // Disable the settings image
+            settingsMenu.SetActive(false);
         }
 
         if (mainMenuImage != null)
         {
-            mainMenuImage.SetActive(true);  // Enable the main menu image
+            mainMenuImage.SetActive(true);
+        }
+    }
+
+    public void OpenControlsMenu()
+    {
+        if (settingsMenu != null)
+        {
+            settingsMenu.SetActive(false);
+        }
+
+        if (controlsMenu != null)
+        {
+            controlsMenu.SetActive(true);
+        }
+    }
+
+    public void BackToSettingsMenu()
+    {
+        if (controlsMenu != null)
+        {
+            controlsMenu.SetActive(false);
+        }
+
+        if (settingsMenu != null)
+        {
+            settingsMenu.SetActive(true);
         }
     }
 }

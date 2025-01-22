@@ -10677,9 +10677,10 @@ GameObject:
   - component: {fileID: 1410254614}
   - component: {fileID: 1410254613}
   - component: {fileID: 1410254617}
-  - component: {fileID: 1410254619}
-  - component: {fileID: 1410254620}
   - component: {fileID: 1410254621}
+  - component: {fileID: 1410254619}
+  - component: {fileID: 1410254622}
+  - component: {fileID: 1410254620}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -10804,7 +10805,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 7
-  m_Sprite: {fileID: 21300000, guid: 0bc800444b7ef8144abdcb3be3c2fa00, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a95b0cd6e0aa0a847b74474d61a8f529, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -10920,6 +10921,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   healthSlider: {fileID: 1624951134}
+--- !u!114 &1410254622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410254612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6b7558d8371e1408a3aeb8e7580254, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skills:
+  - {fileID: 11400000, guid: 82f18a2851988184ba53004413a2b8e1, type: 2}
+  - {fileID: 11400000, guid: a2de13c0c9d2aec4dade412601446a33, type: 2}
+  skillKeys: 6600000068000000
+  playerClassData: {fileID: 11400000, guid: febfa08664f20f34499c3f6c8b47d7e7, type: 2}
+  raycastOrigin: {fileID: 1066144538}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  currentAttackDistance: 0
+  attackPower: 0
 --- !u!1 &1419497339
 GameObject:
   m_ObjectHideFlags: 0

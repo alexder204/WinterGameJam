@@ -89,7 +89,6 @@ public class PlayerAttack : MonoBehaviour
         // Handle the third combo stage (Attack2)
         else if (comboIndex == 2 && comboTimer > 0f)
         {
-            Attack();  // Perform the attack
             ResetCombo();  // After this attack, the combo ends
         }
     }
